@@ -2,6 +2,7 @@
 
 namespace Terraform;
 
+use Terraform\Blocks\Block;
 
 class Terraform
 {
@@ -9,9 +10,13 @@ class Terraform
 
     public function __set($name, $value)
     {
-        echo "Setting '$name'" . PHP_EOL;
-        // var_dump($value);
-        $this->terraform[][$name] = $value;
+        if (!($value instanceof Block)) {
+            throw new \Exception('Value must be a type of block.');
+        }
+        if (isset($this->terraform[$name])) {
+            echo "Warning: $name is already set." . PHP_EOL;
+        }
+        $this->terraform[$name] = $value;
     }
 
     public function save($filename = 'terraform.tf.json')
@@ -26,12 +31,10 @@ class Terraform
 
     public function toJson()
     {
-        $a=[];
-        foreach($this->terraform as $key=>$value){
-            echo 'key: ';print_r($key);
-            echo 'value: ';print_r($value);
-
+        $a = [];
+        foreach ($this->terraform as $key => $value) {
+            $a = array_merge_recursive($a, $value->toArray());
         }
-        return json_encode($this->terraform, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return json_encode($a, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }
