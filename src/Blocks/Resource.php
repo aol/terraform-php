@@ -1,14 +1,15 @@
 <?php
 namespace Terraform\Blocks;
 
-class Resource extends Base
+class Resource extends Block
 {
-    protected $type, $name;
-
     public function __construct($resourceType, $resourceName)
     {
-        $this->block = 'resource';
-        $this->type = $resourceType;
-        $this->name = $resourceName;
+        parent::__construct('resource', $resourceType, $resourceName);
+    }
+
+    public function toArray()
+    {
+        return [$this->_block => [$this->_type => [$this->_name => $this->_data]]];
     }
 }

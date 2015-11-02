@@ -3,15 +3,10 @@
 namespace Terraform\Blocks;
 
 
-class Provider extends Base
+class Provider extends Block
 {
-    protected $resourceType, $resourceName;
-
-    public function __construct($resourceType, $resourceName)
+    public function __construct($resourceType)
     {
-        $this->block = 'provider';
-        $this->resourceType = $resourceType;
-        $this->resourceName = $resourceName;
-        return $this;
+        parent::__construct('provider', $resourceType);
     }
 }
