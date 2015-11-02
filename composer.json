@@ -1,9 +1,9 @@
 {
-    "name": "aabdeldayem12/terraform-php",
+    "name": "terraform-php",
     "authors": [
         {
             "name": "Ameir Abdeldayem",
-            "email": "ameir.abdeldayem@teamaol.com"
+            "email": "ameirh@gmail.com"
         }
     ],
     "autoload": {
