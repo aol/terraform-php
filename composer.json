@@ -1,0 +1,15 @@
+{
+    "name": "aabdeldayem12/terraform-php",
+    "authors": [
+        {
+            "name": "Ameir Abdeldayem",
+            "email": "ameir.abdeldayem@teamaol.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Terraform\\": "src/"
+        }
+    },
+    "require": {}
+}
