@@ -24,11 +24,6 @@ class Terraform
         file_put_contents($filename, $this->toJson());
     }
 
-    public function dump()
-    {
-        var_dump($this->terraform);
-    }
-
     public function toJson()
     {
         $a = [];
@@ -36,5 +31,10 @@ class Terraform
             $a = array_merge_recursive($a, $value->toArray());
         }
         return json_encode($a, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function dump()
+    {
+        var_dump($this->terraform);
     }
 }

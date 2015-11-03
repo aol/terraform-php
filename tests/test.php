@@ -3,6 +3,8 @@
 require_once '../vendor/autoload.php';
 
 use Terraform\Blocks\Resource;
+use Terraform\Helpers\Aws as AwsHelpers;
+use Terraform\Macros\Aws\Aws as AwsMacros;
 
 $terraform = new \Terraform\Terraform();
 
@@ -25,8 +27,12 @@ $policy->role = '${aws_iam_role.foo_role.id}';
 $policy->prop = 'prop';
 $terraform->policy = $policy;
 
+$sg = AwsMacros::securityGroup('my_sg', 'vpc-12345678');
+$sg->description = 'We can update properties like this.';
+$terraform->sg = $sg;
+
 $terraform->save();
 
-$aws=new \Terraform\Helpers\Aws\Aws();
-$azs=$aws->listAvailabilityZones();
+$aws = new AwsHelpers\Aws();
+$azs = $aws->listAvailabilityZones();
 print_r($azs);
