@@ -11,5 +11,7 @@
             "Terraform\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "aws/aws-sdk-php": "3.9.3"
+    }
 }

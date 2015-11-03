@@ -26,3 +26,7 @@ $policy->prop = 'prop';
 $terraform->policy = $policy;
 
 $terraform->save();
+
+$aws=new \Terraform\Helpers\Aws\Aws();
+$azs=$aws->listAvailabilityZones();
+print_r($azs);
