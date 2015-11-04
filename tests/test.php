@@ -31,6 +31,9 @@ $sg = AwsMacros::securityGroup('my_sg', 'vpc-12345678');
 $sg->description = 'We can update properties like this.';
 $terraform->sg = $sg;
 
+$role = AwsMacros::iamRole('my_role');
+$terraform->role = $role;
+
 $terraform->save();
 
 $aws = new AwsHelpers\Aws();
