@@ -1,7 +1,7 @@
 <?php
 namespace Terraform\Blocks;
 
-class Resource extends Block
+class Resource extends Block implements BlockInterface
 {
     public function __construct($resourceType, $resourceName)
     {
