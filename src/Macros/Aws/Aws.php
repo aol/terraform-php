@@ -9,13 +9,13 @@ class Aws
     public static function securityGroup($name, $vpcId, $cidrBlocks = ["0.0.0.0/0"], $fromPort = 0, $toPort = 0, $protocol = -1)
     {
         $sg = new Resource('aws_security_group', $name);
-        $sg->ingress = [
+        $sg->egress = [
             "cidr_blocks" => ["0.0.0.0/0"],
             "from_port" => 0,
             "to_port" => 0,
             "protocol" => -1,
         ];
-        $sg->egress = [
+        $sg->ingress = [
             "cidr_blocks" => $cidrBlocks,
             "from_port" => $fromPort,
             "to_port" => $toPort,
