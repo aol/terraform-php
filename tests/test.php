@@ -13,7 +13,7 @@ $provider->region = 'us-east-1';
 $terraform->provider = $provider;
 
 foreach (['prod', 'dev', 'staging'] as $env) {
-    $lc = new Resource('aws_launch_configuration', 'my_launch_configuration_'.$env);
+    $lc = new Resource('aws_launch_configuration', 'my_launch_configuration_' . $env);
     $lc->image_id = 'ami-eb02508e';
     $lc->instance_type = 't2.micro';
     $lc->key_name = 'my_key';
@@ -34,8 +34,16 @@ $terraform->sg = $sg;
 $role = AwsMacros::iamRole('my_role');
 $terraform->role = $role;
 
+$subnets = [];
+$aws = new AwsHelpers\Aws();
+foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
+    $subnets['public_name_' . $key] = 'Public ' . $availabilityZone;
+    $subnets['public_zone_' . $key] = $availabilityZone;
+    $subnets['private_name_' . $key] = 'Private ' . $availabilityZone;
+    $subnets['private_zone_' . $key] = $availabilityZone;
+}
+$varSubnets = new \Terraform\Blocks\Variable('subnets', $subnets);
+$terraform->varSubnets = $varSubnets;
+
 $terraform->save();
 
-$aws = new AwsHelpers\Aws();
-$azs = $aws->listAvailabilityZones();
-print_r($azs);
