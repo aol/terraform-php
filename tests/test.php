@@ -37,13 +37,13 @@ $terraform->role = $role;
 $subnets = [];
 $aws = new AwsHelpers\Aws();
 foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
-    $subnets['public_name_' . $key] = 'Public ' . $availabilityZone;
+    $lastChar = strtoupper(substr($availabilityZone, -1));
+    $subnets['public_name_' . $key] = 'Public ' . $lastChar;
     $subnets['public_zone_' . $key] = $availabilityZone;
-    $subnets['private_name_' . $key] = 'Private ' . $availabilityZone;
+    $subnets['private_name_' . $key] = 'Private ' . $lastChar;
     $subnets['private_zone_' . $key] = $availabilityZone;
 }
 $varSubnets = new \Terraform\Blocks\Variable('subnets', $subnets);
 $terraform->varSubnets = $varSubnets;
 
 $terraform->save();
-
