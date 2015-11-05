@@ -20,6 +20,7 @@ class Aws
     {
         $ec2 = $this->aws->createEc2();
         $result = $ec2->describeAvailabilityZones();
+
         return array_column($result->toArray()['AvailabilityZones'], 'ZoneName');
     }
 }

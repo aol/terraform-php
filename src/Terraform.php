@@ -30,6 +30,7 @@ class Terraform
         foreach ($this->terraform as $key => $value) {
             $a = array_merge_recursive($a, $value->toArray());
         }
+
         return json_encode($a, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 

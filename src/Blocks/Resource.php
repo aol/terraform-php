@@ -1,4 +1,5 @@
 <?php
+
 namespace Terraform\Blocks;
 
 class Resource extends Block implements BlockInterface
