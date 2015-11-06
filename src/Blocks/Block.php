@@ -4,7 +4,7 @@ namespace Terraform\Blocks;
 
 class Block
 {
-    protected $terraform, $_block, $_type, $_name, $_data = [];
+    protected $_block, $_type, $_name, $_data = [];
 
     public function __construct($block, $type, $name = null)
     {
