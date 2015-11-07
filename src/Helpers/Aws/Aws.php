@@ -23,4 +23,9 @@ class Aws
 
         return array_column($result->toArray()['AvailabilityZones'], 'ZoneName');
     }
+
+    public function getSdk()
+    {
+        return $this->aws;
+    }
 }
