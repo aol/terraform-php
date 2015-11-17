@@ -47,6 +47,17 @@ foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
 // list all VPCs
 print_r($aws->listVpcs());
 
+$options = [
+    'Filters' => [
+        [
+            'Name' => 'isDefault',
+            'Values' => ['false'],
+        ],
+    ],
+];
+// list all VPCs
+print_r($aws->listSubnets($options));
+
 $varSubnets = new \Terraform\Blocks\Variable('subnets', $subnets);
 $terraform->varSubnets = $varSubnets;
 
