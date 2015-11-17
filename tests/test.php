@@ -1,6 +1,6 @@
 <?php
 
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Terraform\Blocks\Resource;
 use Terraform\Helpers\Aws as AwsHelpers;
@@ -43,6 +43,10 @@ foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
     $subnets['private_name_' . $key] = 'Private ' . $lastChar;
     $subnets['private_zone_' . $key] = $availabilityZone;
 }
+
+// list all VPCs
+print_r($aws->listVpcs());
+
 $varSubnets = new \Terraform\Blocks\Variable('subnets', $subnets);
 $terraform->varSubnets = $varSubnets;
 
