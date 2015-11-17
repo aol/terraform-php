@@ -32,6 +32,15 @@ class Aws
         return array_column($result->toArray()['Vpcs'], 'VpcId');
     }
 
+
+    public function listSubnets($options = [])
+    {
+        $ec2 = $this->aws->createEc2();
+        $result = $ec2->describeSubnets($options);
+
+        return array_column($result->toArray()['Subnets'], 'SubnetId');
+    }
+
     public function getSdk()
     {
         return $this->aws;
