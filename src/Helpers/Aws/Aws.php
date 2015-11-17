@@ -16,10 +16,10 @@ class Aws
         ]);
     }
 
-    public function listAvailabilityZones()
+    public function listAvailabilityZones($options = [])
     {
         $ec2 = $this->aws->createEc2();
-        $result = $ec2->describeAvailabilityZones();
+        $result = $ec2->describeAvailabilityZones($options);
 
         return array_column($result->toArray()['AvailabilityZones'], 'ZoneName');
     }
