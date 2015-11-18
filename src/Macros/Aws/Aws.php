@@ -45,4 +45,17 @@ class Aws
 
         return $role;
     }
+
+    public static function iamRolePolicy($name, $role, array $statement = [])
+    {
+        $rolePolicy = new Resource('aws_iam_role_policy', $name);
+        $rolePolicy->name = $name;
+        $rolePolicy->role = $role;
+        $rolePolicy->policy = json_encode([
+            'Version' => '2012-10-17',
+            'Statement' => $statement,
+        ]);
+
+        return $rolePolicy;
+    }
 }
