@@ -58,4 +58,13 @@ class Aws
 
         return $rolePolicy;
     }
+
+    public static function iamInstanceProfile($name, array $roles)
+    {
+        $instanceProfile = new Resource('aws_iam_instance_profile', $name);
+        $instanceProfile->name = $name;
+        $instanceProfile->roles = $roles;
+
+        return $instanceProfile;
+    }
 }
