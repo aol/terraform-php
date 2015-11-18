@@ -34,6 +34,17 @@ $terraform->sg = $sg;
 $role = AwsMacros::iamRole('my_role');
 $terraform->role = $role;
 
+$statement = [
+    "Effect" => "Allow",
+    "Action" => [
+        "ec2:AttachNetworkInterface",
+    ],
+    "Resource" => ["*"],
+];
+$rolePolicy = AwsMacros::iamRolePolicy('my_policy', $role->getTfProp('id'), $statement);
+var_dump($rolePolicy);
+$terraform->rolePolicy = $rolePolicy;
+
 $subnets = [];
 $aws = new AwsHelpers\Aws();
 foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
@@ -47,16 +58,8 @@ foreach ($aws->listAvailabilityZones() as $key => $availabilityZone) {
 // list all VPCs
 print_r($aws->listVpcs());
 
-$options = [
-    'Filters' => [
-        [
-            'Name' => 'isDefault',
-            'Values' => ['false'],
-        ],
-    ],
-];
 // list all VPCs
-print_r($aws->listSubnets($options));
+print_r($aws->listSubnets());
 
 $varSubnets = new \Terraform\Blocks\Variable('subnets', $subnets);
 $terraform->varSubnets = $varSubnets;
