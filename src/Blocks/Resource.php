@@ -13,4 +13,9 @@ class Resource extends Block implements BlockInterface
     {
         return [$this->_block => [$this->_type => [$this->_name => $this->_data]]];
     }
+
+    public function getTfProp($property = 'id')
+    {
+        return "{$this->_type}.{$this->_name}.{$property}";
+    }
 }
