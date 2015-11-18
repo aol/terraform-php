@@ -21,7 +21,7 @@ class Aws
         $ec2 = $this->aws->createEc2();
         $result = $ec2->describeAvailabilityZones($options);
 
-        return $fullResponse ? $result : array_column($result->toArray()['AvailabilityZones'], 'ZoneName');
+        return $fullResponse ? $result->toArray() : array_column($result->toArray()['AvailabilityZones'], 'ZoneName');
     }
 
     public function listVpcs($options = [], $fullResponse = false)
@@ -29,16 +29,15 @@ class Aws
         $ec2 = $this->aws->createEc2();
         $result = $ec2->describeVpcs($options);
 
-        return $fullResponse ? $result : array_column($result->toArray()['Vpcs'], 'VpcId');
+        return $fullResponse ? $result->toArray() : array_column($result->toArray()['Vpcs'], 'VpcId');
     }
-
 
     public function listSubnets($options = [], $fullResponse = false)
     {
         $ec2 = $this->aws->createEc2();
         $result = $ec2->describeSubnets($options);
 
-        return $fullResponse ? $result : array_column($result->toArray()['Subnets'], 'SubnetId');
+        return $fullResponse ? $result->toArray() : array_column($result->toArray()['Subnets'], 'SubnetId');
     }
 
     public function getSdk()
