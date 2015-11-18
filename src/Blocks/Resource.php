@@ -14,8 +14,12 @@ class Resource extends Block implements BlockInterface
         return [$this->_block => [$this->_type => [$this->_name => $this->_data]]];
     }
 
-    public function getTfProp($property = 'id')
+    public function getTfProp($property = 'id', $encapsulate = true)
     {
-        return "{$this->_type}.{$this->_name}.{$property}";
+        $resource = "{$this->_type}.{$this->_name}.{$property}";
+        if ($encapsulate) {
+            $resource = '${' . $resource . '}';
+        }
+        return $resource;
     }
 }
