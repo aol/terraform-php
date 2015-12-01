@@ -12,6 +12,6 @@
         }
     },
     "require": {
-        "aws/aws-sdk-php": "3.9.3"
+        "aws/aws-sdk-php": "~3"
     }
 }
