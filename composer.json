@@ -1,17 +1,17 @@
 {
-    "name": "ameir/terraform-php",
-    "authors": [
-        {
-            "name": "Ameir Abdeldayem",
-            "email": "ameirh@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Terraform\\": "src/"
-        }
-    },
-    "require": {
-        "aws/aws-sdk-php": "~3"
+  "name": "ameir/terraform-php",
+  "authors": [
+    {
+      "name": "Ameir Abdeldayem",
+      "email": "ameirh@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Terraform\\": "src/"
+    }
+  },
+  "require": {
+    "aws/aws-sdk-php": "~3"
+  }
 }
