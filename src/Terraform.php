@@ -41,9 +41,10 @@ class Terraform
         return self::jsonEncode($a);
     }
 
-    public static function jsonEncode($input)
+    public static function jsonEncode($input, $pretty = true)
     {
-        return json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $flag = $pretty ? JSON_PRETTY_PRINT : 0;
+        return json_encode($input, $flag | JSON_UNESCAPED_SLASHES);
     }
 
     public static function hclEncode($input)
