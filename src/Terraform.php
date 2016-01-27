@@ -24,12 +24,19 @@ class Terraform
         file_put_contents($filename, $this->toJson());
     }
 
-    public function toJson()
+    public function deepMerge()
     {
         $a = [];
         foreach ($this->terraform as $key => $value) {
             $a = array_merge_recursive($a, $value->toArray());
         }
+
+        return $a;
+    }
+
+    public function toJson()
+    {
+        $a = $this->deepMerge();
 
         return self::jsonEncode($a);
     }
