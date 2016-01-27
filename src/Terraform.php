@@ -59,7 +59,7 @@ class Terraform
                     $s .= ' "' . $blockName . '"';
                     $s .= ' {';
                     foreach ($block as $name => $values) {
-                        $blockText .= "\n$name = " . json_encode($values, JSON_PRETTY_PRINT);
+                        $blockText .= "\n$name = " . self::jsonEncode($values);
                     }
                     $s .= str_replace("\n", "\n\t", $blockText);
                     $s .= PHP_EOL . '}' . PHP_EOL;
@@ -70,7 +70,7 @@ class Terraform
                         $s .= ' "' . $blockName . '"';
                         $s .= ' "' . $name . '" {';
                         foreach ($values as $key => $value) {
-                            $blockText .= "\n$key = " . json_encode($value, JSON_PRETTY_PRINT);
+                            $blockText .= "\n$key = " . self::jsonEncode($value);
                         }
                         $s .= str_replace("\n", "\n\t", $blockText);
                         $s .= PHP_EOL . '}' . PHP_EOL;
