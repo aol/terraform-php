@@ -2,6 +2,7 @@
 
 namespace Terraform\Macros\Aws;
 
+use Terraform\Terraform;
 use Terraform\Blocks\Resource;
 
 class Aws
@@ -47,7 +48,7 @@ class Aws
         $role = new Resource('aws_iam_role', $name);
         $role->name = $name;
         $role->path = $path;
-        $role->assume_role_policy = json_encode([
+        $role->assume_role_policy = Terraform::jsonEncode([
                 'Version' => '2012-10-17',
                 'Statement' => [$policy],
             ]
@@ -66,7 +67,7 @@ class Aws
         $rolePolicy = new Resource('aws_iam_role_policy', $name);
         $rolePolicy->name = $name;
         $rolePolicy->role = $role;
-        $rolePolicy->policy = json_encode([
+        $rolePolicy->policy = Terraform::jsonEncode([
             'Version' => '2012-10-17',
             'Statement' => [$policy],
         ]);

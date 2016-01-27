@@ -31,7 +31,12 @@ class Terraform
             $a = array_merge_recursive($a, $value->toArray());
         }
 
-        return json_encode($a, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return self::jsonEncode($a);
+    }
+
+    public static function jsonEncode($input)
+    {
+        return json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
     public function dump()
