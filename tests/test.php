@@ -21,13 +21,11 @@ foreach (['prod', 'dev', 'staging'] as $env) {
     $terraform->{"lc_$env"} = $lc;
 }
 
-$policy = new Resource('aws_iam_role_policy', 'foo_policy');
-$policy->name = 'foo_policy';
-$policy->role = '${aws_iam_role.foo_role.id}';
-$policy->prop = 'prop';
-$terraform->policy = $policy;
-
-$sg = AwsMacros::securityGroup('my_sg', 'vpc-12345678');
+$rules = [
+    '0.0.0.0/0' => [80, 443, 8010],
+    '10.0.0.0/8,192.168.1.0/24' => [0],
+];
+$sg = AwsMacros::securityGroup('my_sg', 'vpc-12345678', $rules);
 $sg->description = 'We can update properties like this.';
 $terraform->sg = $sg;
 

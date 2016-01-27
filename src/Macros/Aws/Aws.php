@@ -14,12 +14,19 @@ class Aws
             'to_port' => 0,
             'protocol' => -1,
         ];
-        $rules['ingress'] += $defaults;
-        $rules['egress'] += $defaults;
 
+        $ingress = [];
+        foreach ($rules as $networks => $ports) {
+            $b = $defaults;
+            $b['cidr_blocks'] = explode(',', $networks);
+            foreach ($ports as $port) {
+                $b['from_port'] = $b['to_port'] = $port;
+                $ingress[] = $b;
+            }
+        }
         $sg = new Resource('aws_security_group', $name);
-        $sg->ingress = $rules['ingress'];
-        $sg->egress = $rules['egress'];
+        $sg->ingress = $ingress;
+        $sg->egress = $defaults;
         $sg->vpc_id = $vpcId;
         $sg->name = $name;
         $sg->description = "$name security group";
@@ -27,7 +34,7 @@ class Aws
         return $sg;
     }
 
-    public static function iamRole($name, array $policy, $path = '/')
+    public static function iamRole($name, array $policy = [], $path = '/')
     {
         $defaults = [
             'Action' => 'sts:AssumeRole',
