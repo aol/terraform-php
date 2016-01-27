@@ -14,7 +14,7 @@ class Terraform
             throw new \Exception('Value must be a type of block.');
         }
         if (isset($this->terraform[$name])) {
-            echo "Warning: $name is already set." . PHP_EOL;
+            fwrite(STDERR, "Warning: $name is already set." . PHP_EOL);
         }
         $this->terraform[$name] = $value;
     }
