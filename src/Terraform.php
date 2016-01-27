@@ -19,9 +19,12 @@ class Terraform
         $this->terraform[$name] = $value;
     }
 
-    public function save($filename = 'terraform.tf.json')
+    public function save($format = 'json', $filename = null)
     {
-        file_put_contents($filename, $this->toJson());
+        if ($filename === null) {
+            $filename = "terraform.tf" . $format == 'json' ? '.json' : '';
+        }
+        file_put_contents($filename, $format == 'json' ? $this->toJson() : $this->toHcl());
     }
 
     public function deepMerge()
@@ -32,6 +35,13 @@ class Terraform
         }
 
         return $a;
+    }
+
+    public function toHcl()
+    {
+        $a = $this->deepMerge();
+
+        return self::hclEncode($a);
     }
 
     public function toJson()
