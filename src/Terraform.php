@@ -49,17 +49,33 @@ class Terraform
 
     public static function hclEncode($input)
     {
+        $s = '';
         foreach ($input as $blockType => $blocks) {
             foreach ($blocks as $blockName => $block) {
-                foreach ($block as $name => $values) {
-                    echo PHP_EOL . $blockType;
-                    echo ' "' . $blockName . '"';
-                    echo ' "' . $name . '" {';
-                    foreach ($values as $key => $value) {
-                        echo "\n\t$key = " . self::jsonEncode($value);
+                // these blocks are treated differently
+                if (in_array($blockType, ['variable', 'provider'])) {
+                    $blockText = '';
+                    $s .= PHP_EOL . $blockType;
+                    $s .= ' "' . $blockName . '"';
+                    $s .= ' {';
+                    foreach ($block as $name => $values) {
+                        $blockText .= "\n$name = " . json_encode($values, JSON_PRETTY_PRINT);
+                    }
+                    $s .= str_replace("\n", "\n\t", $blockText);
+                    $s .= PHP_EOL . '}' . PHP_EOL;
+                } else {
+                    foreach ($block as $name => $values) {
+                        $blockText = '';
+                        $s .= PHP_EOL . $blockType;
+                        $s .= ' "' . $blockName . '"';
+                        $s .= ' "' . $name . '" {';
+                        foreach ($values as $key => $value) {
+                            $blockText .= "\n$key = " . json_encode($value, JSON_PRETTY_PRINT);
+                        }
+                        $s .= str_replace("\n", "\n\t", $blockText);
+                        $s .= PHP_EOL . '}' . PHP_EOL;
                     }
                 }
-                echo PHP_EOL . '}' . PHP_EOL;
             }
         }
     }
