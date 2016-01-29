@@ -69,7 +69,7 @@ class Terraform
                     $s .= ' "' . $blockName . '"';
                     $s .= ' {';
                     foreach ($block as $name => $values) {
-                        $blockText .= "\n$name = " . self::jsonEncode($values);
+                        $blockText .= "\n$name = " . self::cleanJsonForHcl(self::jsonEncode($values));
                     }
                     $s .= str_replace("\n", "\n\t", $blockText);
                     $s .= PHP_EOL . '}' . PHP_EOL;
@@ -80,7 +80,7 @@ class Terraform
                         $s .= ' "' . $blockName . '"';
                         $s .= ' "' . $name . '" {';
                         foreach ($values as $key => $value) {
-                            $blockText .= "\n$key = " . self::jsonEncode($value);
+                            $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($value));
                         }
                         $s .= str_replace("\n", "\n\t", $blockText);
                         $s .= PHP_EOL . '}' . PHP_EOL;
@@ -88,6 +88,16 @@ class Terraform
                 }
             }
         }
+        return $s;
+    }
+
+    public static function cleanJsonForHcl($string)
+    {
+        // replace ': ' in JSON with ' = '
+        $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $string);
+        // remove trailing commas
+        $hcl = preg_replace('/,\n/', "\n", $hcl);
+        return $hcl;
     }
 
     public function dump()
