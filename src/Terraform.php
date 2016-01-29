@@ -69,7 +69,7 @@ class Terraform
                     $s .= ' "' . $blockName . '"';
                     $s .= ' {';
                     foreach ($block as $name => $values) {
-                        $blockText .= "\n$name = " . self::cleanJsonForHcl(self::jsonEncode($values));
+                        $blockText .= "\n$name = " . self::serializeToHcl($values);
                     }
                     $s .= str_replace("\n", "\n\t", $blockText);
                     $s .= PHP_EOL . '}' . PHP_EOL;
@@ -83,10 +83,10 @@ class Terraform
                             // handle case when multiple rules are specified in SG
                             if (in_array($key, ['ingress', 'egress']) && isset($value[0])) {
                                 foreach ($value as $v) {
-                                    $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($v));
+                                    $blockText .= "\n$key = " . self::serializeToHcl($v);
                                 }
                             } else {
-                                $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($value));
+                                $blockText .= "\n$key = " . self::serializeToHcl($value);
                             }
                         }
                         $s .= str_replace("\n", "\n\t", $blockText);
@@ -98,10 +98,11 @@ class Terraform
         return $s;
     }
 
-    public static function cleanJsonForHcl($string)
+    public static function serializeToHcl($value)
     {
+        $value = self::jsonEncode($value);
         // replace ': ' in JSON with ' = '
-        $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $string);
+        $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $value);
         // remove trailing commas
         $hcl = preg_replace('/,\n/', "\n", $hcl);
         return $hcl;
