@@ -80,7 +80,14 @@ class Terraform
                         $s .= ' "' . $blockName . '"';
                         $s .= ' "' . $name . '" {';
                         foreach ($values as $key => $value) {
-                            $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($value));
+                            // handle case when multiple rules are specified in SG
+                            if (in_array($key, ['ingress', 'egress']) && isset($value[0])) {
+                                foreach ($value as $v) {
+                                    $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($v));
+                                }
+                            } else {
+                                $blockText .= "\n$key = " . self::cleanJsonForHcl(self::jsonEncode($value));
+                            }
                         }
                         $s .= str_replace("\n", "\n\t", $blockText);
                         $s .= PHP_EOL . '}' . PHP_EOL;
