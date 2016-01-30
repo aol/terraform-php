@@ -22,7 +22,7 @@ class Terraform
     public function save($format = 'json', $filename = null)
     {
         if ($filename === null) {
-            $filename = "terraform.tf" . $format == 'json' ? '.json' : '';
+            $filename = "terraform.tf" . ($format == 'json' ? '.json' : '');
         }
         file_put_contents($filename, $format == 'json' ? $this->toJson() : $this->toHcl());
     }
