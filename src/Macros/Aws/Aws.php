@@ -2,8 +2,8 @@
 
 namespace Terraform\Macros\Aws;
 
-use Terraform\Terraform;
 use Terraform\Blocks\Resource;
+use Terraform\Terraform;
 
 class Aws
 {
@@ -29,6 +29,8 @@ class Aws
                     $b['from_port'] = $b['to_port'] = $port;
                     $ingress[] = $b;
                 }
+            } else {
+                $ingress[] = $b;
             }
         }
         $sg = new Resource('aws_security_group', $name);
