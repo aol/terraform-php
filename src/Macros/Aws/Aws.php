@@ -17,12 +17,18 @@ class Aws
         ];
 
         $ingress = [];
-        foreach ($rules as $networks => $ports) {
+        foreach ($rules as $rule) {
             $b = $defaults;
-            $b['cidr_blocks'] = explode(',', $networks);
-            foreach ($ports as $port) {
-                $b['from_port'] = $b['to_port'] = $port;
-                $ingress[] = $b;
+            foreach (['cidr_blocks', 'protocol'] as $key) {
+                if (isset($rule[$key])) {
+                    $b[$key] = $rule[$key];
+                }
+            }
+            if (isset($rule['ports'])) {
+                foreach ($rule['ports'] as $port) {
+                    $b['from_port'] = $b['to_port'] = $port;
+                    $ingress[] = $b;
+                }
             }
         }
         $sg = new Resource('aws_security_group', $name);
