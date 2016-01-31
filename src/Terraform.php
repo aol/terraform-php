@@ -80,8 +80,8 @@ class Terraform
                         $s .= ' "' . $blockName . '"';
                         $s .= ' "' . $name . '" {';
                         foreach ($values as $key => $value) {
-                            // handle case when multiple rules are specified in SG
-                            if (in_array($key, ['ingress', 'egress']) && isset($value[0])) {
+                            // handle cases where key can be specified multiple times
+                            if (in_array($key, ['ingress', 'egress', 'tag']) && isset($value[0])) {
                                 foreach ($value as $v) {
                                     $blockText .= "\n$key = " . self::serializeToHcl($v);
                                 }
