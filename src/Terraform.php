@@ -100,11 +100,17 @@ class Terraform
 
     public static function serializeToHcl($value)
     {
-        $value = self::jsonEncode($value);
-        // replace ': ' in JSON with ' = '
-        $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $value);
-        // remove trailing commas
-        $hcl = preg_replace('/,\n/', "\n", $hcl);
+        $json = self::jsonEncode($value);
+        // HCL and JSON have the same array syntax
+        if (isset($value[0])) {
+            $hcl = $json;
+        } else {
+            // replace ': ' in JSON with ' = '
+            $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $json);
+            // remove trailing commas
+            $hcl = preg_replace('/,\n/', "\n", $hcl);
+        }
+
         return $hcl;
     }
 
