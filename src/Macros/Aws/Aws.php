@@ -91,4 +91,44 @@ class Aws
 
         return $instanceProfile;
     }
+
+    public static function autoscalingPolicy($name, array $policy)
+    {
+        $defaults = [
+            'name' => $name,
+            'adjustment_type' => "ChangeInCapacity",
+            'cooldown' => 300,
+            'scaling_adjustment' => 2,
+        ];
+        $policy += $defaults;
+
+        $autoscalingPolicy = new Resource('aws_autoscaling_policy', $name);
+        foreach ($policy as $key => $value) {
+            $autoscalingPolicy->$key = $value;
+        }
+
+        return $autoscalingPolicy;
+    }
+
+    public static function cloudwatchMetricAlarm($name, array $policy)
+    {
+        $defaults = [
+            'alarm_name' => $name,
+            'evaluation_periods' => 1,
+            'metric_name' => "CPUUtilization",
+            'comparison_operator' => "GreaterThanThreshold",
+            'threshold' => 60,
+            'namespace' => "AWS/EC2",
+            'period' => "60",
+            'statistic' => "Average",
+        ];
+        $policy += $defaults;
+
+        $cloudwatchMetricAlarm = new Resource('aws_cloudwatch_metric_alarm', $name);
+        foreach ($policy as $key => $value) {
+            $cloudwatchMetricAlarm->$key = $value;
+        }
+
+        return $cloudwatchMetricAlarm;
+    }
 }
