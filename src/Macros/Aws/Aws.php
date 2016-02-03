@@ -131,4 +131,34 @@ class Aws
 
         return $cloudwatchMetricAlarm;
     }
+
+    public static function elb($name, array $options)
+    {
+        $defaults = [
+            'name' => $name,
+            'listener' => [
+                'instance_port' => 80,
+                'instance_protocol' => "http",
+                'lb_port' => 80,
+                'lb_protocol' => "http",
+            ],
+            'health_check' => [
+                'healthy_threshold' => 2,
+                'unhealthy_threshold' => 2,
+                'timeout' => 5,
+                'target' => "HTTP:80/",
+                'interval' => 30,
+            ],
+            'cross_zone_load_balancing' => true,
+            'tags' => ['Name' => $name],
+        ];
+        $options += $defaults;
+
+        $elb = new Resource('aws_elb', $name);
+        foreach ($options as $key => $value) {
+            $elb->$key = $value;
+        }
+
+        return $elb;
+    }
 }
