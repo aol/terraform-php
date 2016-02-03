@@ -39,6 +39,7 @@ class Aws
         $sg->vpc_id = $vpcId;
         $sg->name = $name;
         $sg->description = "$name security group";
+        $sg->tags = ['Name' => $name];
 
         return $sg;
     }
