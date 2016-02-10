@@ -17,6 +17,9 @@ class Aws
         ];
 
         $ingress = [];
+        if (!count($rules)) {
+            $ingress = $defaults;
+        }
         foreach ($rules as $rule) {
             $b = $defaults;
             foreach (['cidr_blocks', 'protocol'] as $key) {
