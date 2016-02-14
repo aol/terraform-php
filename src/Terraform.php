@@ -106,10 +106,11 @@ class Terraform
         if (isset($value[0])) {
             $hcl = $json;
         } else {
-            // replace ': ' in JSON with ' = '
-            $hcl = preg_replace('/((\s+)?"(\w+)"):\s/', '$1 = ', $json);
-            // remove trailing commas
-            $hcl = preg_replace('/,\n/', "\n", $hcl);
+            // replace ': ' in JSON with ' = ' and remove trailing commas from most lines
+            $hcl = preg_replace('/"(.+)":\s((.+)(,$)|(.+))/m', '$1 = $3$5', $json);
+
+            // remove '],' from cidr_block entries
+            $hcl = str_replace("],\n", "]\n", $hcl);
         }
 
         return $hcl;
