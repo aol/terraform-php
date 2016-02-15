@@ -107,7 +107,7 @@ class Terraform
             $hcl = $json;
         } else {
             // replace ': ' in JSON with ' = ' and remove trailing commas from most lines
-            $hcl = preg_replace('/"(.+)":\s((.+)(,$)|(.+))/m', '$1 = $3$5', $json);
+            $hcl = preg_replace('/"(.+)":\s((.+)(,$)|(.+))$/m', '$1 = $3$5', $json);
 
             // remove '],' from cidr_block entries
             $hcl = str_replace("],\n", "]\n", $hcl);
