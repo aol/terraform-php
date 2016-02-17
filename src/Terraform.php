@@ -8,6 +8,11 @@ class Terraform
 {
     protected $terraform = [];
 
+    public function __get($name)
+    {
+        return $this->terraform[$name];
+    }
+
     public function __set($name, $value)
     {
         if (!($value instanceof Block)) {
