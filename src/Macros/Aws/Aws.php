@@ -114,6 +114,28 @@ class Aws
         return $autoscalingPolicy;
     }
 
+    public static function autoscalingNotification($name, $groupNames, $topicArn, array $options)
+    {
+        $defaults = [
+            'notifications' => [
+                "autoscaling:EC2_INSTANCE_LAUNCH",
+                "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                "autoscaling:EC2_INSTANCE_TERMINATE",
+                "autoscaling:EC2_INSTANCE_TERMINATE_ERROR",
+            ],
+        ];
+        $options += $defaults;
+
+        $autoscalingNotification = new Resource('aws_autoscaling_notification', $name);
+        foreach ($options as $key => $value) {
+            $autoscalingNotification->$key = $value;
+        }
+        $autoscalingNotification->group_names = (array)$groupNames;
+        $autoscalingNotification->topic_arn = $topicArn;
+
+        return $autoscalingNotification;
+    }
+
     public static function cloudwatchMetricAlarm($name, array $policy)
     {
         $defaults = [
