@@ -114,7 +114,7 @@ class Aws
         return $autoscalingPolicy;
     }
 
-    public static function autoscalingNotification($name, $groupNames, $topicArn, array $options)
+    public static function autoscalingNotification($name, $groupNames, $topicArn, array $options = [])
     {
         $defaults = [
             'notifications' => [
