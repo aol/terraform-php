@@ -8,8 +8,10 @@ class Aws
 {
     protected $aws;
 
-    public function __construct($region = 'us-east-1')
+    public function __construct($region = null)
     {
+        $region = $region ?: getenv('AWS_DEFAULT_REGION');
+
         $this->aws = new Sdk([
             'region' => $region,
             'version' => 'latest',
