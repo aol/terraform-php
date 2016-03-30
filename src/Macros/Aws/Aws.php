@@ -56,6 +56,23 @@ class Aws
         return $user;
     }
 
+    public static function iamUserPolicy($name, array $policy)
+    {
+        $defaults = [
+            'Effect' => 'Allow',
+        ];
+        $policy += $defaults;
+
+        $userPolicy = new Resource('aws_iam_user_policy', $name);
+        $userPolicy->name = $name;
+        $userPolicy->policy = Terraform::jsonEncode([
+            'Version' => '2012-10-17',
+            'Statement' => [$policy],
+        ]);
+
+        return $userPolicy;
+    }
+
     public static function iamRole($name, array $policy = [], $path = '/')
     {
         $defaults = [
