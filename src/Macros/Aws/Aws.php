@@ -47,6 +47,15 @@ class Aws
         return $sg;
     }
 
+    public static function iamUser($name, $path = '/')
+    {
+        $user = new Resource('aws_iam_user', $name);
+        $user->name = $name;
+        $user->path = $path;
+
+        return $user;
+    }
+
     public static function iamRole($name, array $policy = [], $path = '/')
     {
         $defaults = [
