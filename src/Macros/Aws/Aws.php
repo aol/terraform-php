@@ -56,7 +56,7 @@ class Aws
         return $user;
     }
 
-    public static function iamUserPolicy($name, array $policy)
+    public static function iamUserPolicy($name, $user, array $policy)
     {
         $defaults = [
             'Effect' => 'Allow',
@@ -65,6 +65,7 @@ class Aws
 
         $userPolicy = new Resource('aws_iam_user_policy', $name);
         $userPolicy->name = $name;
+        $userPolicy->user = $user;
         $userPolicy->policy = Terraform::jsonEncode([
             'Version' => '2012-10-17',
             'Statement' => [$policy],
