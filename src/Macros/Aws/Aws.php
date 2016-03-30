@@ -187,4 +187,19 @@ class Aws
 
         return $elb;
     }
+
+    public static function s3Bucket($name, array $options = [])
+    {
+        $defaults = [
+            'bucket' => $name,
+            'acl' => 'private',
+            'tags' => ['Name' => $name],
+        ];
+        $options += $defaults;
+
+        $s3Bucket = new Resource('aws_s3_bucket', $name);
+        foreach ($options as $key => $value) {
+            $s3Bucket->$key = $value;
+        }
+    }
 }
