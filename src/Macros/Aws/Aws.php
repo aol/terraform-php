@@ -201,5 +201,6 @@ class Aws
         foreach ($options as $key => $value) {
             $s3Bucket->$key = $value;
         }
+        return $s3Bucket;
     }
 }
