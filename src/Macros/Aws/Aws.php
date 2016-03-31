@@ -61,14 +61,16 @@ class Aws
         $defaults = [
             'Effect' => 'Allow',
         ];
-        $policy += $defaults;
+        foreach ($policy as &$p) {
+            $p += $defaults;
+        }
 
         $userPolicy = new Resource('aws_iam_user_policy', $name);
         $userPolicy->name = $name;
         $userPolicy->user = $user;
         $userPolicy->policy = Terraform::jsonEncode([
             'Version' => '2012-10-17',
-            'Statement' => [$policy],
+            'Statement' => $policy,
         ]);
 
         return $userPolicy;
@@ -101,14 +103,16 @@ class Aws
         $defaults = [
             'Effect' => 'Allow',
         ];
-        $policy += $defaults;
+        foreach ($policy as &$p) {
+            $p += $defaults;
+        }
 
         $rolePolicy = new Resource('aws_iam_role_policy', $name);
         $rolePolicy->name = $name;
         $rolePolicy->role = $role;
         $rolePolicy->policy = Terraform::jsonEncode([
             'Version' => '2012-10-17',
-            'Statement' => [$policy],
+            'Statement' => $policy,
         ]);
 
         return $rolePolicy;
