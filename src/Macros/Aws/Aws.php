@@ -58,13 +58,6 @@ class Aws
 
     public static function iamUserPolicy($name, $user, array $policy)
     {
-        $defaults = [
-            'Effect' => 'Allow',
-        ];
-        foreach ($policy as &$p) {
-            $p += $defaults;
-        }
-
         $userPolicy = new Resource('aws_iam_user_policy', $name);
         $userPolicy->name = $name;
         $userPolicy->user = $user;
@@ -100,13 +93,6 @@ class Aws
 
     public static function iamRolePolicy($name, $role, array $policy)
     {
-        $defaults = [
-            'Effect' => 'Allow',
-        ];
-        foreach ($policy as &$p) {
-            $p += $defaults;
-        }
-
         $rolePolicy = new Resource('aws_iam_role_policy', $name);
         $rolePolicy->name = $name;
         $rolePolicy->role = $role;
