@@ -23,6 +23,8 @@ This is meant to be used as a library for your own PHP-based projects.  As such,
 ```
 
 ## Usage
+This project uses PHP magic methods (namely `__set()` and `__get()`), and does not hardcode support for any Terraform resources.  That means that we're automatically compatible with any new resources that Terraform implements. 
+Below is an example of what using this project could look like.  Note the use of macros for creating security groups, and the manual creation of the `aws_elasticache_cluster` resource.
 
 ```
 $projectLongName = 'My Test Project';
@@ -72,5 +74,4 @@ foreach (['prod', 'dev', 'staging'] as $env) {
     $redis->tags = $tags;
     $terraform->{"redis_$name"} = $redis;
 }
-
-    
+```
