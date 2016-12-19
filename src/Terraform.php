@@ -107,6 +107,12 @@ class Terraform
     public static function serializeToHcl($value)
     {
         $json = self::jsonEncode($value);
+
+        // https://github.com/hashicorp/terraform/issues/10812
+        if (preg_match('/\${(.+)}/m', $json)) {
+            $json = str_replace('\\"', '"', $json);
+        }
+
         // HCL and JSON have the same array syntax
         if (isset($value[0])) {
             $hcl = $json;
