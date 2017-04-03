@@ -73,10 +73,8 @@ class Terraform
                     $s .= PHP_EOL . $blockType;
                     $s .= ' "' . $blockName . '"';
                     $s .= ' {';
-                    foreach ($block as $name => $values) {
-                        $blockText .= "\n$name = " . self::serializeToHcl($values);
-                    }
-                    $s .= str_replace("\n", "\n\t", $blockText);
+                    $blockText = self::serializeToHcl($block);
+                    $s .= $blockText;
                     $s .= PHP_EOL . '}' . PHP_EOL;
                 } else {
                     foreach ($block as $name => $values) {
@@ -84,18 +82,8 @@ class Terraform
                         $s .= PHP_EOL . $blockType;
                         $s .= ' "' . $blockName . '"';
                         $s .= ' "' . $name . '" {';
-                        foreach ($values as $key => $value) {
-                            // handle cases where key can be specified multiple times (like ingress, egress, tag)
-                            // this will be an array of hashes
-                            if (isset($value[0]) && is_array($value[0])) {
-                                foreach ($value as $v) {
-                                    $blockText .= "\n$key = " . self::serializeToHcl($v);
-                                }
-                            } else {
-                                $blockText .= "\n$key = " . self::serializeToHcl($value);
-                            }
-                        }
-                        $s .= str_replace("\n", "\n\t", $blockText);
+                        $blockText = self::serializeToHcl($values);
+                        $s .= $blockText;
                         $s .= PHP_EOL . '}' . PHP_EOL;
                     }
                 }
@@ -104,31 +92,49 @@ class Terraform
         return $s;
     }
 
-    public static function serializeToHcl($value)
+    public static function serializeToHcl(array $values, $indentLevel = 1)
     {
-        $json = self::jsonEncode($value);
+        $indent = self::indent($indentLevel);
 
-        // https://github.com/hashicorp/terraform/issues/10812
-        if (preg_match('/\${(.+)}/m', $json)) {
-            $json = str_replace('\\"', '"', $json);
+        $hcl = '';
+        foreach ($values as $key => $value) {
+            // handle cases where key can be specified multiple times (like ingress, egress, tag)
+            // this will be an array of hashes
+            if (isset($value[0]) && is_array($value[0])) {
+                foreach ($value as $k => $v) {
+                    $hcl .= PHP_EOL . $indent . "$key = {";
+                    $hcl .= self::serializeToHcl($v, $indentLevel + 1);
+                    $hcl .= PHP_EOL . $indent . "}";
+                }
+            } elseif (is_array($value)) {
+                $hcl .= PHP_EOL . $indent . "$key = ";
+                if (self::arrayIsAssociative($value)) {
+                    $hcl .= '{';
+                    $hcl .= self::serializeToHcl($value, $indentLevel + 1);
+                    $hcl .= PHP_EOL . $indent . '}';
+                } else {
+                    $hcl .= self::jsonEncode($value, false);
+                }
+            } else {
+                $hcl .= PHP_EOL . $indent . "$key = " . ((strlen($value) && $value[0] == '$') ? '"' . $value . '"' : self::jsonEncode($value));
+            }
         }
-
-        // HCL and JSON have the same array syntax
-        if (isset($value[0])) {
-            $hcl = $json;
-        } else {
-            // replace ': ' in JSON with ' = ' and remove trailing commas from most lines
-            $hcl = preg_replace('/"(.+)":\s((.+)(,$)|(.+))$/m', '$1 = $3$5', $json);
-
-            // remove '],' from cidr_block entries
-            $hcl = str_replace("],\n", "]\n", $hcl);
-        }
-
         return $hcl;
     }
 
     public function dump()
     {
         var_dump($this->terraform);
+    }
+
+    public static function indent($level)
+    {
+        return str_repeat("\t", $level);
+    }
+
+    // http://stackoverflow.com/a/4254008
+    public static function arrayIsAssociative(array $array)
+    {
+        return count(array_filter(array_keys($array), 'is_string')) > 0;
     }
 }
