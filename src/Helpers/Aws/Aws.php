@@ -42,6 +42,14 @@ class Aws
         return $fullResponse ? $result->toArray() : array_column($result->toArray()['Subnets'], 'SubnetId');
     }
 
+    public function findAmi($options = [], $fullResponse = false)
+    {
+        $ec2 = $this->aws->createEc2();
+        $result = $ec2->describeImages($options);
+
+        return $fullResponse ? $result->toArray() : array_column($result->toArray()['Images'], 'ImageId');
+    }
+
     public function getSdk()
     {
         return $this->aws;
