@@ -13,7 +13,7 @@ class Block
         $this->_name = $name;
     }
 
-    public function __get($name)
+    public function &__get($name)
     {
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
