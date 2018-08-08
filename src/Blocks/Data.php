@@ -18,7 +18,7 @@ class Data extends Block implements BlockInterface
     {
         $resource = "{$this->_type}.{$this->_name}.{$property}";
         if ($encapsulate) {
-            $resource = '${' . $resource . '}';
+            $resource = '${data.' . $resource . '}';
         }
         return $resource;
     }
